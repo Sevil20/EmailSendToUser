@@ -1,1 +1,1 @@
-# EmailSendToUser
+# Send email to user with using nodemailer
