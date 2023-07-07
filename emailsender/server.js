@@ -1,28 +1,44 @@
+import express, { json } from 'express';
 import { createTransport } from 'nodemailer';
 
-// Create a transporter object with your email service provider details
-const transporter = createTransport({
-  service: 'ethereal.email',
-  auth: {
-    user: 'leora69@ethereal.email',
-    pass: 'UgbXzCtrTkJSs7rvK9'
+const app = express();
+app.use(json());
+
+app.post('/send-email', async (req, res) => {
+  const { email, subject, message } = req.body;
+
+  try {
+    // Create a transporter using your email server configuration
+    const transporter = createTransport({
+      host: 'gmail',
+      port: 587,
+      secure: false,
+      auth: {
+        user: 'sevilmirzyeva010@gmail.com',
+        pass: 'jczcykfzaqynwtdq',
+      },
+    });
+
+    // Send email
+    await transporter.sendMail({
+      from: 'sevilmirzyeva010@gmail.com',
+      to: email,
+      subject: subject,
+      text: 'This is a test email sent using Nodemailer.'
+    });
+
+    res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Failed to send email' });
   }
 });
 
-// Define the email options
-const mailOptions = {
-  from: 'leora69@ethereal.email',
-  to: 'sevilmirzyeva010@gmail.com',
-  subject: 'Hello from Nodemailer',
-  text: 'This is a test email sent using Nodemailer.'
-};
-
-// Send the email
-transporter.sendMail(mailOptions, function(error, info) {
-  if (error) {
-    console.log('Error occurred:', error.message);
-  } else {
-    console.log('Email sent successfully!');
-    console.log('Message ID:', info.messageId);
-  }
+app.listen(5173, () => {
+  console.log('Server started on port 5174');
 });
+
+
+
+
+
